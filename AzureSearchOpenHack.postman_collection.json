@@ -1,0 +1,425 @@
+{
+	"info": {
+		"_postman_id": "80fcc84a-b73c-4cd4-8ad5-1576d76313c7",
+		"name": "AzureSearchOpenHack",
+		"description": "Create and load an index using embedded JSON documents, and then run queries to return results. This collection makes POST and GET requests using the Azure Search REST APIs.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CreateIndex Copy",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "api-key",
+						"value": "{{admin-key}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{service-name}}.search.windows.net/indexes/{{index-name}}?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"{{service-name}}",
+						"search",
+						"windows",
+						"net"
+					],
+					"path": [
+						"indexes",
+						"{{index-name}}"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					]
+				},
+				"description": "Create an Azure Search index that contains searchable information about 4 hotels."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Data Source Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "api-key",
+						"value": "{{admin-key}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"datasource-1\",\r\n  \"type\": \"azureblob\",\r\n  \"credentials\": {\r\n  \"connectionString\": \"DefaultEndpointsProtocol=https;AccountName=searchblobm5;AccountKey=BLi3LVg0NMZb7U9JT9l18Wdojg3wttunMCz7/AsJczlGISNA2vGIEo5sPuNMdvpUNwSqCCcSgpMrAJu9Zo7PnQ==;EndpointSuffix=core.windows.net\"\r\n},\r\n  \"container\": {\r\n    \"name\": \"data\"\r\n  }\r\n}"
+				},
+				"url": {
+					"raw": "https://{{service-name}}.search.windows.net/datasources?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"{{service-name}}",
+						"search",
+						"windows",
+						"net"
+					],
+					"path": [
+						"datasources"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LoadDocuments Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "api-key",
+						"value": "{{admin-key}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"value\": [\r\n    {\r\n    \"@search.action\": \"upload\",\r\n    \"HotelId\": \"1\",\r\n    \"HotelName\": \"Secret Point Motel\",\r\n    \"Description\": \"The hotel is ideally located on the main commercial artery of the city in the heart of New York. A few minutes away is Time's Square and the historic centre of the city, as well as other places of interest that make New York one of America's most attractive and cosmopolitan cities.\",\r\n    \"Category\": \"Boutique\",\r\n    \"Tags\": [ \"pool\", \"air conditioning\", \"concierge\" ],\r\n    \"ParkingIncluded\": false,\r\n    \"LastRenovationDate\": \"1970-01-18T00:00:00Z\",\r\n    \"Rating\": 3.60,\r\n    \"Address\": \r\n        {\r\n        \"StreetAddress\": \"677 5th Ave\",\r\n        \"City\": \"New York\",\r\n        \"StateProvince\": \"NY\",\r\n        \"PostalCode\": \"10022\",\r\n        \"Country\": \"USA\"\r\n        } \r\n    },\r\n    {\r\n    \"@search.action\": \"upload\",\r\n    \"HotelId\": \"2\",\r\n    \"HotelName\": \"Twin Dome Motel\",\r\n    \"Description\": \"The hotel is situated in a  nineteenth century plaza, which has been expanded and renovated to the highest architectural standards to create a modern, functional and first-class hotel in which art and unique historical elements coexist with the most modern comforts.\",\r\n    \"Category\": \"Boutique\",\r\n    \"Tags\": [ \"pool\", \"free wifi\", \"concierge\" ],\r\n    \"ParkingIncluded\": false,\r\n    \"LastRenovationDate\": \"1979-02-18T00:00:00Z\",\r\n    \"Rating\": 3.60,\r\n    \"Address\": \r\n        {\r\n        \"StreetAddress\": \"140 University Town Center Dr\",\r\n        \"City\": \"Sarasota\",\r\n        \"StateProvince\": \"FL\",\r\n        \"PostalCode\": \"34243\",\r\n        \"Country\": \"USA\"\r\n        } \r\n    },\r\n    {\r\n    \"@search.action\": \"upload\",\r\n    \"HotelId\": \"3\",\r\n    \"HotelName\": \"Triple Landscape Hotel\",\r\n    \"Description\": \"The Hotel stands out for its gastronomic excellence under the management of William Dough, who advises on and oversees all of the Hotel’s restaurant services.\",\r\n    \"Category\": \"Resort and Spa\",\r\n    \"Tags\": [ \"air conditioning\", \"bar\", \"continental breakfast\" ],\r\n    \"ParkingIncluded\": true,\r\n    \"LastRenovationDate\": \"2015-09-20T00:00:00Z\",\r\n    \"Rating\": 4.80,\r\n    \"Address\": \r\n        {\r\n        \"StreetAddress\": \"3393 Peachtree Rd\",\r\n        \"City\": \"Atlanta\",\r\n        \"StateProvince\": \"GA\",\r\n        \"PostalCode\": \"30326\",\r\n        \"Country\": \"USA\"\r\n        } \r\n    },\r\n    {\r\n    \"@search.action\": \"upload\",\r\n    \"HotelId\": \"4\",\r\n    \"HotelName\": \"Sublime Cliff Hotel\",\r\n    \"Description\": \"Sublime Cliff Hotel is located in the heart of the historic center of Sublime in an extremely vibrant and lively area within short walking distance to the sites and landmarks of the city and is surrounded by the extraordinary beauty of churches, buildings, shops and monuments. Sublime Cliff is part of a lovingly restored 1800 palace.\",\r\n    \"Category\": \"Boutique\",\r\n    \"Tags\": [ \"concierge\", \"view\", \"24-hour front desk service\" ],\r\n    \"ParkingIncluded\": true,\r\n    \"LastRenovationDate\": \"1960-02-06T00:00:00Z\",\r\n    \"Rating\": 4.60,\r\n    \"Address\": \r\n        {\r\n        \"StreetAddress\": \"7400 San Pedro Ave\",\r\n        \"City\": \"San Antonio\",\r\n        \"StateProvince\": \"TX\",\r\n        \"PostalCode\": \"78216\",\r\n        \"Country\": \"USA\"\r\n        }\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "https://{{service-name}}.search.windows.net/indexes/hotels-quickstart/docs/index?api-version=2020-06-30",
+					"protocol": "https",
+					"host": [
+						"{{service-name}}",
+						"search",
+						"windows",
+						"net"
+					],
+					"path": [
+						"indexes",
+						"hotels-quickstart",
+						"docs",
+						"index"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2020-06-30"
+						}
+					]
+				},
+				"description": "Create an Azure Search index that contains searchable information about 4 hotels."
+			},
+			"response": []
+		},
+		{
+			"name": "SearchDocuments",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "api-key",
+						"value": "{{admin-key}}"
+					}
+				],
+				"url": {
+					"raw": "https://{{service-name}}.search.windows.net/indexes/azureblob-index-1/docs?search=London+Buckingham Palace&$count=true&api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"{{service-name}}",
+						"search",
+						"windows",
+						"net"
+					],
+					"path": [
+						"indexes",
+						"azureblob-index-1",
+						"docs"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "London+Buckingham Palace"
+						},
+						{
+							"key": "$count",
+							"value": "true"
+						},
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					]
+				},
+				"description": "Create an Azure Search index that contains searchable information about 4 hotels."
+			},
+			"response": []
+		},
+		{
+			"name": "GetIndexProperties",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "api-key",
+						"value": "{{admin-key}}"
+					}
+				],
+				"url": {
+					"raw": "https://{{service-name}}.search.windows.net/indexes/hotels-quickstart/stats?api-version=2020-06-30",
+					"protocol": "https",
+					"host": [
+						"{{service-name}}",
+						"search",
+						"windows",
+						"net"
+					],
+					"path": [
+						"indexes",
+						"hotels-quickstart",
+						"stats"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2020-06-30"
+						}
+					]
+				},
+				"description": "Create an Azure Search index that contains searchable information about 4 hotels."
+			},
+			"response": []
+		},
+		{
+			"name": "CreateIndex Copy",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "api-key",
+						"value": "{{admin-key}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"dm-azureblob-index-1\",\n  \"fields\": [\n    {\n      \"name\": \"content\",\n      \"type\": \"Edm.String\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"key\": false,\n      \"retrievable\": true,\n      \"searchable\": true,\n      \"sortable\": false,\n      \"analyzer\": \"standard.lucene\",\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"metadata_storage_content_type\",\n      \"type\": \"Edm.String\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"key\": false,\n      \"retrievable\": false,\n      \"searchable\": false,\n      \"sortable\": false,\n      \"analyzer\": null,\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"metadata_storage_size\",\n      \"type\": \"Edm.Int64\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"retrievable\": false,\n      \"sortable\": false,\n      \"analyzer\": null,\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"metadata_storage_last_modified\",\n      \"type\": \"Edm.DateTimeOffset\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"retrievable\": false,\n      \"sortable\": false,\n      \"analyzer\": null,\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"metadata_storage_content_md5\",\n      \"type\": \"Edm.String\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"key\": false,\n      \"retrievable\": false,\n      \"searchable\": false,\n      \"sortable\": false,\n      \"analyzer\": null,\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"metadata_storage_name\",\n      \"type\": \"Edm.String\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"key\": false,\n      \"retrievable\": false,\n      \"searchable\": false,\n      \"sortable\": false,\n      \"analyzer\": null,\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"metadata_storage_path\",\n      \"type\": \"Edm.String\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"key\": true,\n      \"retrievable\": true,\n      \"searchable\": false,\n      \"sortable\": false,\n      \"analyzer\": null,\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"metadata_storage_file_extension\",\n      \"type\": \"Edm.String\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"key\": false,\n      \"retrievable\": false,\n      \"searchable\": false,\n      \"sortable\": false,\n      \"analyzer\": null,\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"metadata_content_type\",\n      \"type\": \"Edm.String\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"key\": false,\n      \"retrievable\": false,\n      \"searchable\": false,\n      \"sortable\": false,\n      \"analyzer\": null,\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"metadata_language\",\n      \"type\": \"Edm.String\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"key\": false,\n      \"retrievable\": false,\n      \"searchable\": false,\n      \"sortable\": false,\n      \"analyzer\": null,\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"metadata_author\",\n      \"type\": \"Edm.String\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"key\": false,\n      \"retrievable\": false,\n      \"searchable\": false,\n      \"sortable\": false,\n      \"analyzer\": null,\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"metadata_creation_date\",\n      \"type\": \"Edm.DateTimeOffset\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"retrievable\": false,\n      \"sortable\": false,\n      \"analyzer\": null,\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"people\",\n      \"type\": \"Collection(Edm.String)\",\n      \"facetable\": false,\n      \"filterable\": true,\n      \"retrievable\": true,\n      \"searchable\": true,\n      \"analyzer\": \"standard.lucene\",\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"organizations\",\n      \"type\": \"Collection(Edm.String)\",\n      \"facetable\": false,\n      \"filterable\": true,\n      \"retrievable\": true,\n      \"searchable\": true,\n      \"analyzer\": \"standard.lucene\",\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"locations\",\n      \"type\": \"Collection(Edm.String)\",\n      \"facetable\": false,\n      \"filterable\": true,\n      \"retrievable\": true,\n      \"searchable\": true,\n      \"analyzer\": \"standard.lucene\",\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"keyphrases\",\n      \"type\": \"Collection(Edm.String)\",\n      \"facetable\": false,\n      \"filterable\": true,\n      \"retrievable\": true,\n      \"searchable\": true,\n      \"analyzer\": \"standard.lucene\",\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"sentiment\",\n      \"type\": \"Edm.String\",\n      \"facetable\": false,\n      \"filterable\": true,\n      \"retrievable\": true,\n      \"searchable\": true,\n      \"analyzer\": \"standard.lucene\",\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n     {\n      \"name\": \"merged_content\",\n      \"type\": \"Edm.String\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"key\": false,\n      \"retrievable\": true,\n      \"searchable\": true,\n      \"sortable\": false,\n      \"analyzer\": \"standard.lucene\",\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"text\",\n      \"type\": \"Collection(Edm.String)\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"retrievable\": true,\n      \"searchable\": true,\n      \"analyzer\": \"standard.lucene\",\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"layoutText\",\n      \"type\": \"Collection(Edm.String)\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"retrievable\": true,\n      \"searchable\": true,\n      \"analyzer\": \"standard.lucene\",\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"imageTags\",\n      \"type\": \"Collection(Edm.String)\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"retrievable\": true,\n      \"searchable\": true,\n      \"analyzer\": \"standard.lucene\",\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"imageCaption\",\n      \"type\": \"Collection(Edm.String)\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"retrievable\": true,\n      \"searchable\": true,\n      \"analyzer\": \"standard.lucene\",\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    },\n    {\n      \"name\": \"imageCelebrities\",\n      \"type\": \"Collection(Edm.String)\",\n      \"facetable\": false,\n      \"filterable\": false,\n      \"retrievable\": true,\n      \"searchable\": true,\n      \"analyzer\": \"standard.lucene\",\n      \"indexAnalyzer\": null,\n      \"searchAnalyzer\": null,\n      \"synonymMaps\": [],\n      \"fields\": []\n    }\n  ],\n  \"suggesters\": [],\n  \"scoringProfiles\": [],\n  \"defaultScoringProfile\": \"\",\n  \"corsOptions\": null,\n  \"analyzers\": [],\n  \"charFilters\": [],\n  \"tokenFilters\": [],\n  \"tokenizers\": [],\n  \"similarity\": {\n    \"@odata.type\": \"#Microsoft.Azure.Search.BM25Similarity\",\n    \"k1\": null,\n    \"b\": null\n  },\n  \"encryptionKey\": null,\n  \"@odata.etag\": \"\\\"0x8D9A3BB18079289\\\"\"\n}"
+				},
+				"url": {
+					"raw": "https://{{service-name}}.search.windows.net/indexes/{{index-name}}?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"{{service-name}}",
+						"search",
+						"windows",
+						"net"
+					],
+					"path": [
+						"indexes",
+						"{{index-name}}"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					]
+				},
+				"description": "Create an Azure Search index that contains searchable information about 4 hotels."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Indexer Copy",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{admin-key}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"azureblob-indexer-1\",\n  \"dataSourceName\": \"datasource-1\",\n  \"skillsetName\": \"azureblob-skillset-1\",\n  \"targetIndexName\": \"azureblob-index-1\",\n  \"disabled\": null,\n  \"schedule\": null,\n  \"parameters\": {\n    \"batchSize\": null,\n    \"maxFailedItems\": 0,\n    \"maxFailedItemsPerBatch\": 0,\n    \"base64EncodeKeys\": null,\n    \"configuration\": {\n      \"dataToExtract\": \"contentAndMetadata\",\n      \"parsingMode\": \"default\",\n      \"imageAction\": \"generateNormalizedImages\"\n    }\n  },\n  \"fieldMappings\": [\n    {\n      \"sourceFieldName\": \"metadata_storage_path\",\n      \"targetFieldName\": \"metadata_storage_path\",\n      \"mappingFunction\": {\n        \"name\": \"base64Encode\",\n        \"parameters\": null\n      }\n    }\n  ],\n  \"outputFieldMappings\": [\n    {\n      \"sourceFieldName\": \"/document/content/people\",\n      \"targetFieldName\": \"people\"\n    },\n    {\n      \"sourceFieldName\": \"/document/content/organizations\",\n      \"targetFieldName\": \"organizations\"\n    },\n    {\n      \"sourceFieldName\": \"/document/content/locations\",\n      \"targetFieldName\": \"locations\"\n    },\n    {\n      \"sourceFieldName\": \"/document/content/keyphrases\",\n      \"targetFieldName\": \"keyphrases\"\n    },\n    {\n      \"sourceFieldName\": \"/document/content/sentiment\",\n      \"targetFieldName\": \"sentiment\"\n    }\n  ],\n  \"cache\": null,\n  \"encryptionKey\": null\n}"
+				},
+				"url": {
+					"raw": "https://{{service-name}}.search.windows.net/indexers/azureblob-indexer-1?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"{{service-name}}",
+						"search",
+						"windows",
+						"net"
+					],
+					"path": [
+						"indexers",
+						"azureblob-indexer-1"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "03 - Create a skillset Copy",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{admin-key}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"azureblob-skillset-1\",\r\n  \"description\": \"Skillset created from the portal. skillsetName: dm-azureblob-skillset; contentField: content; enrichmentGranularity: document; knowledgeStoreStorageAccount: ;\",\r\n  \"skills\": [\r\n    {\r\n      \"@odata.type\": \"#Microsoft.Skills.Text.V3.EntityRecognitionSkill\",\r\n      \"name\": \"#1\",\r\n      \"description\": null,\r\n      \"context\": \"/document/content\",\r\n      \"categories\": [\r\n        \"Product\",\r\n        \"PhoneNumber\",\r\n        \"Person\",\r\n        \"Quantity\",\r\n        \"Organization\",\r\n        \"IPAddress\",\r\n        \"URL\",\r\n        \"Email\",\r\n        \"Event\",\r\n        \"Skill\",\r\n        \"Location\",\r\n        \"PersonType\",\r\n        \"Address\",\r\n        \"DateTime\"\r\n      ],\r\n      \"defaultLanguageCode\": \"en\",\r\n      \"minimumPrecision\": null,\r\n      \"modelVersion\": null,\r\n      \"inputs\": [\r\n        {\r\n          \"name\": \"text\",\r\n          \"source\": \"/document/content\"\r\n        }\r\n      ],\r\n      \"outputs\": [\r\n        {\r\n          \"name\": \"persons\",\r\n          \"targetName\": \"people\"\r\n        },\r\n        {\r\n          \"name\": \"organizations\",\r\n          \"targetName\": \"organizations\"\r\n        },\r\n        {\r\n          \"name\": \"locations\",\r\n          \"targetName\": \"locations\"\r\n        }\r\n      ]\r\n    },\r\n    {\r\n      \"@odata.type\": \"#Microsoft.Skills.Text.KeyPhraseExtractionSkill\",\r\n      \"name\": \"#2\",\r\n      \"description\": null,\r\n      \"context\": \"/document/content\",\r\n      \"defaultLanguageCode\": \"en\",\r\n      \"maxKeyPhraseCount\": null,\r\n      \"modelVersion\": null,\r\n      \"inputs\": [\r\n        {\r\n          \"name\": \"text\",\r\n          \"source\": \"/document/content\"\r\n        }\r\n      ],\r\n      \"outputs\": [\r\n        {\r\n          \"name\": \"keyPhrases\",\r\n          \"targetName\": \"keyphrases\"\r\n        }\r\n      ]\r\n    },\r\n    {\r\n  \"@odata.type\": \"#Microsoft.Skills.Text.V3.SentimentSkill\",\r\n  \"defaultLanguageCode\": \"\",\r\n  \"modelVersion\": \"\",\r\n  \"includeOpinionMining\": true,\r\n  \"name\": \"\",\r\n  \"description\": \"\",\r\n  \"context\": \"/document/content\",\r\n  \"inputs\": [\r\n    {\r\n      \"name\": \"text\",\r\n      \"source\": \"/document/content\"\r\n    },\r\n    {\r\n      \"name\": \"languageCode\",\r\n      \"source\": \"/document/languagecode\"\r\n    }\r\n  ],\r\n  \"outputs\": [\r\n    {\r\n    \"name\": \"sentiment\",\r\n    \"targetName\": \"sentiment\"\r\n    }\r\n]\r\n}\r\n  ],\r\n  \"cognitiveServices\": {\r\n    \"@odata.type\": \"#Microsoft.Azure.Search.CognitiveServicesByKey\",\r\n    \"description\": \"/subscriptions/787a23f1-25c8-4489-a3ef-2cfb29720714/resourceGroups/RG-HackSerach/providers/Microsoft.CognitiveServices/accounts/cognitiveservices-m\",\r\n    \"key\": \"fa0a9290e4df4c6399163547167d5976\"\r\n  },\r\n  \"knowledgeStore\": null,\r\n  \"encryptionKey\": null\r\n}"
+				},
+				"url": {
+					"raw": "https://{{service-name}}.search.windows.net/skillsets/azureblob-skillset-1?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"{{service-name}}",
+						"search",
+						"windows",
+						"net"
+					],
+					"path": [
+						"skillsets",
+						"azureblob-skillset-1"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CustomSkillFunction",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n     \"values\": [\r\n         {\r\n             \"recordId\": \"a1\",\r\n             \"data\":\r\n             {\r\n             \"text\":  \"Four score and seven seven seven seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.\",\r\n             \"language\": \"en\"\r\n             }\r\n         },\r\n         {\r\n             \"recordId\": \"a2\",\r\n             \"data\":\r\n             {\r\n             \"text\":  \"Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battlefield of that war.\",\r\n             \"language\": \"en\"\r\n             }\r\n         }\r\n     ]\r\n }"
+				},
+				"url": {
+					"raw": "https://team5testfunction.azurewebsites.net/api/HttpTrigger1?code=VNoiE8ET3HHpRRtSlPWYNUnfQnfA94IHknXJyfM160ujHh3MPrtfMA==",
+					"protocol": "https",
+					"host": [
+						"team5testfunction",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"HttpTrigger1"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "VNoiE8ET3HHpRRtSlPWYNUnfQnfA94IHknXJyfM160ujHh3MPrtfMA=="
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "service-name",
+			"value": "openhack-search"
+		},
+		{
+			"key": "admin-key",
+			"value": "A9B8A36D9997B3C26992CC99F6980331"
+		},
+		{
+			"key": "index-name",
+			"value": "dm-azureblob-index-1"
+		},
+		{
+			"key": "api-version",
+			"value": "2020-06-30-Preview"
+		}
+	]
+}
